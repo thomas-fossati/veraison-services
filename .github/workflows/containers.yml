@@ -14,6 +14,9 @@ jobs:
       contents: read
       attestations: write
       id-token: write
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -28,9 +31,10 @@ jobs:
       - name: Publish docker images
         id: push
         run: |
-          image_name="ghcr.io/thomas-fossati/veraison/vts:${{  github.ref_name }}"
-          docker tag veraison/vts:latest ${image_name}
-          digest=$(docker push ${image_name} | grep 'digest:' | cut -d' ' -f3)
+          image_name="ghcr.io/thomas-fossati/veraison/vts"
+          image_name_tagged="ghcr.io/thomas-fossati/veraison/vts:${{  github.ref_name }}"
+          docker tag veraison/vts:latest ${image_name_tagged}
+          digest=$(docker push ${image_name_tagged} | grep 'digest:' | cut -d' ' -f3)
           echo "digest=${digest}" >> $GITHUB_OUTPUT
           echo "image_name=${image_name}" >> $GITHUB_OUTPUT
       - name: Generate artifact attestation
