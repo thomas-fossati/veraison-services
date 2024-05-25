@@ -25,10 +25,18 @@ jobs:
       - name: Build docker images
         run: make -C deployments/docker deploy services
       - name: Publish docker images
+        id: push
         run: |
           docker images
-          docker tag veraison/verification:latest ghcr.io/thomas-fossati/veraison/verification:${{  github.ref_name }}
-          docker push ghcr.io/thomas-fossati/veraison/verification:${{  github.ref_name }}
-
-    
+          docker tag veraison/vts:latest ghcr.io/thomas-fossati/veraison/vts:${{  github.ref_name }}
+          digest=$(docker push ghcr.io/thomas-fossati/veraison/vts:${{  github.ref_name }} | grep 'digest:' 
+ cut -d' ' -f3)
+          echo "digest=${digest}" >> $GITHUB_OUTPUT
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+      
       
