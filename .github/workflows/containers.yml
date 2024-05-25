@@ -22,4 +22,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build docker images
+        run: make -C deployments/docker deploy services
+      - name: Publish docker images
+        run: |
+          docker images
+          docker push ghcr.io/thomas-fossati/veraison/verification:${{  github.ref_name }}
+
+    
       
