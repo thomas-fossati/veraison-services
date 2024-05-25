@@ -29,8 +29,8 @@ jobs:
         run: |
           docker images
           docker tag veraison/vts:latest ghcr.io/thomas-fossati/veraison/vts:${{  github.ref_name }}
-          digest=$(docker push ghcr.io/thomas-fossati/veraison/vts:${{  github.ref_name }} | grep 'digest:' 
- cut -d' ' -f3)
+          digest="`docker push ghcr.io/thomas-fossati/veraison/vts:${{  github.ref_name }} | grep 'digest:' 
+ cut -d' ' -f3`"
           echo "digest=${digest}" >> $GITHUB_OUTPUT
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
