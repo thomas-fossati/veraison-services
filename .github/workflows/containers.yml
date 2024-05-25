@@ -27,6 +27,7 @@ jobs:
       - name: Publish docker images
         run: |
           docker images
+          docker tag veraison/verification:latest ghcr.io/thomas-fossati/veraison/verification:${{  github.ref_name }}
           docker push ghcr.io/thomas-fossati/veraison/verification:${{  github.ref_name }}
 
     
