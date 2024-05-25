@@ -28,7 +28,7 @@ jobs:
       - name: Publish docker images
         id: push
         run: |
-          image_name="veraison/vts:latest ghcr.io/thomas-fossati/veraison/vts:${{  github.ref_name }}"
+          image_name="ghcr.io/thomas-fossati/veraison/vts:${{  github.ref_name }}"
           docker tag veraison/vts:latest ${image_name}
           digest=$(docker push ${image_name} | grep 'digest:' | cut -d' ' -f3)
           echo "digest=${digest}" >> $GITHUB_OUTPUT
